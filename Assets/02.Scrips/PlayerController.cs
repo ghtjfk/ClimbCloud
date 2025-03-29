@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,11 +22,11 @@ public class PlayerController : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && rigid2D.velocity.y == 0)
         {
+            animator.SetTrigger("Jump");
             rigid2D.AddForce(transform.up * jumpForce);     //점프한다.
         }
-
         
         //이 방법은 떨어질 때 y축의 속도가 너무 커서 공중에서 방향 조절이 매우매우 미세하다.
         //좌우 키값 지정
@@ -69,7 +71,7 @@ public class PlayerController : MonoBehaviour
             rigid2D.AddForce(transform.right * walkForce);
         }
         */
-        
+
 
 
 
@@ -83,5 +85,16 @@ public class PlayerController : MonoBehaviour
         {
             rigid2D.velocity = new Vector3(walkForce, 0, 0);
         }*/
+
+        if (transform.position.y < -6)
+        {
+            SceneManager.LoadScene("GameScene");
+        }
+    }
+
+    //깃발과의 충돌을 Trigger 모드로 체크
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        SceneManager.LoadScene("ClearScene");
     }
 }
